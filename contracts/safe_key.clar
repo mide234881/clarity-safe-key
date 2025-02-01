@@ -2,8 +2,9 @@
 
 ;; Constants
 (define-constant ERR-NOT-AUTHORIZED (err u100))
-(define-constant ERR-KEY-NOT-FOUND (err u101))
+(define-constant ERR-KEY-NOT-FOUND (err u101)) 
 (define-constant ERR-ALREADY-REGISTERED (err u102))
+(define-constant ERR-PERMISSION-NOT-FOUND (err u103))
 
 ;; Data Variables
 (define-map keys
@@ -100,6 +101,31 @@
             (map-set key-history
                 {key-id: key-id, timestamp: block-height}
                 {action: "permission-added", actor: tx-sender}
+            )
+            (ok true)
+        )
+        ERR-NOT-AUTHORIZED
+    )
+)
+
+(define-public (remove-permission (key-id uint) (user principal))
+    (if (is-owner key-id tx-sender)
+        (let 
+            (
+                (key-info (unwrap! (map-get? keys {key-id: key-id}) ERR-KEY-NOT-FOUND))
+                (permissions (get permissions key-info))
+                (user-index (unwrap! (index-of permissions user) ERR-PERMISSION-NOT-FOUND))
+            )
+            (map-set keys
+                {key-id: key-id}
+                (merge key-info {
+                    permissions: (concat (slice permissions u0 user-index) 
+                                      (slice permissions (+ u1 user-index) (len permissions)))
+                })
+            )
+            (map-set key-history
+                {key-id: key-id, timestamp: block-height}
+                {action: "permission-removed", actor: tx-sender}
             )
             (ok true)
         )

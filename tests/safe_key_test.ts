@@ -86,5 +86,24 @@ Clarinet.test({
         
         block.receipts[1].result.expectOk().expectBool(true);
         block.receipts[2].result.expectOk().expectBool(true);
+
+        // Test permission removal
+        block = chain.mineBlock([
+            Tx.contractCall('safe-key', 'remove-permission', [
+                types.uint(1),
+                types.principal(wallet2.address)
+            ], wallet1.address)
+        ]);
+
+        block.receipts[0].result.expectOk().expectBool(true);
+
+        // Verify wallet2 can no longer use the key
+        block = chain.mineBlock([
+            Tx.contractCall('safe-key', 'use-key', [
+                types.uint(1)
+            ], wallet2.address)
+        ]);
+
+        block.receipts[0].result.expectErr().expectUint(100);
     }
 });
