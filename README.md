@@ -6,6 +6,7 @@ A decentralized key management system built on the Stacks blockchain. This contr
 - Add, remove and transfer keys
 - Set key permissions and access controls
 - Track key usage history
+- Manage key lifecycle and status
 
 ## Features
 
@@ -15,17 +16,25 @@ A decentralized key management system built on the Stacks blockchain. This contr
 - Permission removal functionality
 - Key usage tracking
 - Role-based permissions
+- Key status management (active/inactive)
+- Rate limiting for key usage
+- Key expiration functionality
+- Enhanced history tracking
 
 ## Usage
 
 The contract provides functions for managing digital keys in a decentralized way. Key owners can:
-- Register new keys
+- Register new keys with expiration
 - Transfer key ownership
 - Add permissions for other users
 - Remove permissions from users
 - Track key usage history
+- Activate/deactivate keys
+- Monitor key usage limits
 
 ### New Features
-- Added ability to remove permissions from users
-- Added error handling for permission removal
-- Enhanced permission management capabilities
+- Added key status management (activate/deactivate)
+- Implemented rate limiting for key usage
+- Added key expiration functionality
+- Enhanced history tracking with pagination
+- Improved error handling and validation
